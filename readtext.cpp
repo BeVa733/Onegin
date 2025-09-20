@@ -7,7 +7,7 @@
 
 #include "onegin.h"
 
-char** read_text(const char* filename, int* num_lines)
+char** read_text(const char* filename, file_data* poem_info)
 {
     FILE* file = fopen(filename, "r");
     if (!file)
@@ -19,47 +19,47 @@ char** read_text(const char* filename, int* num_lines)
     long int file_size = chek_file_size(file);
     // printf("%s:%d: %s(): file_size = %d\n", __FILE__, __LINE__, __func__, file_size);
 
-    char* buffer = (char*)calloc(file_size + 1, sizeof(char));
-    if (!buffer)
+    poem_info->buffer_ptr = (char*)calloc(file_size + 1, sizeof(char));
+    if (!poem_info->buffer_ptr)
     {
         fclose(file);
         return NULL;
     }
 
-    size_t read_size = fread(buffer, sizeof(char), file_size, file);
+    poem_info->read_size = fread(poem_info->buffer_ptr, sizeof(char), file_size, file);
 
     fclose(file);
 
-    buffer[read_size] = '\0';
+    poem_info->buffer_ptr[poem_info->read_size] = '\0';
 
-    *num_lines = check_n_lines(buffer, read_size);
+    poem_info->num_lines = check_n_lines(poem_info);
     // printf("%s:%d: %s(): file_size = %d\n", __FILE__, __LINE__, __func__, *num_lines);
 
-    return make_ptr_massive(buffer, *num_lines, read_size);
+    return make_ptr_massive(poem_info);
 
 }
 
-char** make_ptr_massive(char* buffer, int num_lines, size_t read_size)
+char** make_ptr_massive(file_data* poem_info)
 {
-    assert(buffer != NULL);
+    assert(poem_info->buffer_ptr != NULL);
 
-    char** lines = (char**)calloc(num_lines, sizeof(char*));
+    char** lines = (char**)calloc(poem_info->num_lines, sizeof(char*));
     if (!lines)
     {
-        free(buffer);
+        free(poem_info->buffer_ptr);
         return NULL;
     }
 
     int line_index = 0;
-    char* start_str = buffer;
+    char* start_str = poem_info->buffer_ptr;
 
-    for (size_t i = 0; i < read_size; i++)
+    for (size_t i = 0; i < poem_info->read_size; i++)
     {
-        if (buffer[i] == '\n')
+        if (poem_info->buffer_ptr[i] == '\n')
         {
-            buffer[i] = '\0';
+            poem_info->buffer_ptr[i] = '\0';
             lines[line_index++] = start_str;
-            start_str = &buffer[i+1];
+            start_str = &poem_info->buffer_ptr[i+1];
         }
     }
 
@@ -79,11 +79,11 @@ long int chek_file_size(FILE* file)
     return file_info.st_size;
 }
 
-int check_n_lines(char* buffer, size_t read_size)
+int check_n_lines(file_data* poem_info)
 {
 
     int n_lines = 0;
-    char* buf_ptr = strchr(buffer, '\n');
+    char* buf_ptr = strchr(poem_info->buffer_ptr, '\n');
 
     while (buf_ptr != NULL)
     {

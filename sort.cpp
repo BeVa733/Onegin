@@ -5,13 +5,13 @@
 
 #include "onegin.h"
 
-void my_bubble(char** lines, int num_lines)
+void my_bubble(char** lines, file_data* poem_info)
 {
     assert(lines != NULL);
 
-    for (int i = 0; i < num_lines - 1; i++)
+    for (int i = 0; i < poem_info->num_lines - 1; i++)
     {
-        for (int j = 0; j < num_lines - (i+1); j++)
+        for (int j = 0; j < poem_info->num_lines - (i+1); j++)
         {
             if (!is_sorted_str(lines[j], lines[j+1]))
             {
@@ -32,7 +32,7 @@ void swap(char** lines, int index)
     return;
 }
 
-bool is_sorted_str(char* str_1, char* str_2)
+bool is_sorted_str(char* str_1, char* str_2) //TODO перевести в int
 {
     assert(str_1 != NULL);
     assert(str_2 != NULL);

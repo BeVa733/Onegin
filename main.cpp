@@ -8,15 +8,20 @@
 
 int main(void)
 {
-    int num_lines = 0;
-    // file_data poem_info = {}
-    char** lines = read_text("Eugene_Onegin.txt", &num_lines);
+    file_data poem_info =
+    {
+        .buffer_ptr = NULL,
+        .num_lines = 0,
+        .read_size = 0
+    };
 
-    my_bubble(lines, num_lines);
+    char** lines = read_text("Eugene_Onegin.txt", &poem_info);
 
-    write_text(lines, "Onegin_done.txt", num_lines); //struct
+    my_bubble(lines, &poem_info);
 
-    free(lines[0]); //buff
+    write_text(lines, "Onegin_done.txt", &poem_info); //struct
+
+    free(poem_info.buffer_ptr); //buff
     free(lines);//null
     return 0;
 }

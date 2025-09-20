@@ -1,23 +1,23 @@
 #ifndef ONEGIN_H
 #define ONEGIN_H
 
-//struct file_data
-//{
-//    char* buffer_ptr;
-//    int num_lines;
-//    size_t read_size;
-//};
+struct file_data
+{
+    char* buffer_ptr;
+    int num_lines;
+    size_t read_size;
+};
 
-char** read_text(const char* filename, int* num_lines);
+char** read_text(const char* filename, file_data* poem_info);
 
-char** make_ptr_massive(char* buffer, int num_lines, size_t read_size);
+char** make_ptr_massive(file_data* poem_info);
 
 long int chek_file_size(FILE* file);
-int check_n_lines(char* buffer, size_t read_size);
+int check_n_lines(file_data* poem_info);
 
-void write_text(char** lines, const char* outfile_name, int num_lines);
+void write_text(char** lines, const char* outfile_name, file_data* poem_info);
 
-void my_bubble(char** lines, int num_lines);
+void my_bubble(char** lines, file_data* poem_info);
 void swap(char** lines, int index);
 
 bool is_sorted_str(char* str_1, char* str_2);
