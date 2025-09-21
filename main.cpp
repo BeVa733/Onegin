@@ -15,13 +15,24 @@ int main(void)
         .read_size = 0
     };
 
-    char** lines = read_text("Eugene_Onegin.txt", &poem_info);
+    string_data* lines = read_text("Eugene_Onegin.txt", &poem_info);
+
+    FILE* file = fopen("Onegin_done.txt", "w");
 
     my_bubble(lines, &poem_info);
+    write_text(lines, file, &poem_info);
 
-    write_text(lines, "Onegin_done.txt", &poem_info); //struct
+    qsort(lines, poem_info.num_lines, sizeof(string_data), compare_wrapper);
+    write_text(lines, file, &poem_info);
 
-    free(poem_info.buffer_ptr); //buff
-    free(lines);//null
+    write_original(file, &poem_info);
+
+    fclose(file);
+
+    free(poem_info.buffer_ptr);
+    poem_info.buffer_ptr = NULL;
+    free(lines);
+    lines = NULL;
+
     return 0;
 }

@@ -7,13 +7,13 @@
 
 #include "onegin.h"
 
-char** read_text(const char* filename, file_data* poem_info)
+string_data* read_text(const char* filename, file_data* poem_info)
 {
     FILE* file = fopen(filename, "r");
     if (!file)
     {
         printf("Reading error\n");
-        return 0;
+        return NULL;
     }
 
     long int file_size = chek_file_size(file);
@@ -35,15 +35,16 @@ char** read_text(const char* filename, file_data* poem_info)
     poem_info->num_lines = check_n_lines(poem_info);
     // printf("%s:%d: %s(): file_size = %d\n", __FILE__, __LINE__, __func__, *num_lines);
 
-    return make_ptr_massive(poem_info);
+    return make_struct_massive(poem_info);
 
 }
 
-char** make_ptr_massive(file_data* poem_info)
+string_data* make_struct_massive(file_data* poem_info)
 {
     assert(poem_info->buffer_ptr != NULL);
 
-    char** lines = (char**)calloc(poem_info->num_lines, sizeof(char*));
+    string_data* lines = (string_data*)calloc(poem_info->num_lines, sizeof(string_data));
+    
     if (!lines)
     {
         free(poem_info->buffer_ptr);
@@ -51,14 +52,20 @@ char** make_ptr_massive(file_data* poem_info)
     }
 
     int line_index = 0;
+    int len_str = 0;
     char* start_str = poem_info->buffer_ptr;
 
     for (size_t i = 0; i < poem_info->read_size; i++)
     {
+        len_str++;
+
         if (poem_info->buffer_ptr[i] == '\n')
         {
             poem_info->buffer_ptr[i] = '\0';
-            lines[line_index++] = start_str;
+
+            lines[line_index++] = {start_str, len_str};
+
+            len_str = 0;
             start_str = &poem_info->buffer_ptr[i+1];
         }
     }
