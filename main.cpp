@@ -22,7 +22,7 @@ int main(void)
     my_bubble(lines, &poem_info);
     write_text(lines, file, &poem_info);
 
-    qsort(lines, poem_info.num_lines, sizeof(string_data), compare_wrapper);
+    qsort(lines, poem_info.num_lines, sizeof(string_data), reverse_compare_wrapper);
     write_text(lines, file, &poem_info);
 
     write_original(file, &poem_info);

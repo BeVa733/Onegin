@@ -27,8 +27,8 @@ void write_original(FILE* file, file_data* poem_info);
 void my_bubble(string_data* lines, file_data* poem_info);
 void swap(string_data* lines, int index);
 
-bool is_sorted_str(char* str_1, char* str_2);
-int compare_wrapper(const void* a, const void* b);
+int is_sorted_str(char* str_1, char* str_2);
+int reverse_compare_wrapper(const void* a, const void* b);
 int compare_reverse_strings(string_data str1, string_data str2);
 
 

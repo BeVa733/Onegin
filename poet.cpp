@@ -22,7 +22,7 @@ void write_text(string_data* lines, FILE* file, file_data* poem_info)
 void write_original(FILE* file, file_data* poem_info)
 {
     const char* str_ptr = poem_info->buffer_ptr;
-    int cnt_chr = 0;
+    
     for (int i = 0; i < poem_info->num_lines; i++)
     {
         fprintf(file, "%s\n", str_ptr);
